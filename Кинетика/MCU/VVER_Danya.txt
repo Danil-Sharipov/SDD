@@ -1,0 +1,193 @@
+PIN 1 1
+TEMPR 580
+SINOT
+ U235
+ U238
+ O
+ ZR
+ FE
+ H
+ O
+ HE
+MATR 1                ;(1) UO2
+U235 0.000910                 
+U238 0.021841                   
+O    0.04550226                       
+MATR 2 T=580              ;(2) H2O
+H 0.047838  DTEM=10                        
+O 0.02392                          
+MATR 3                ;(3) HE
+HE 0.000026802                       
+MATR 4                       ;(4) ZR+Steel
+ZR 0.0418348    /NB 0.000545                         
+MATR 5                       
+O 1.E-20                      ; VOID
+END                                    
+FINISH MATERIAL 
+HEAD 1 0             
+CONT B B B 
+EQU SK=23.6                  
+EQU SKX=SK*SIN(60)                  
+EQU SKY=SK*COS(60)                  
+EQU HALL=273.6               ; ВЫСОТА АЗ
+RCZ N1 0,118,0 HALL 277.95/2      ; КОНТЕЙНЕР СИСТЕМЫ
+RCZ N2 0,118,0 HALL 277.89/2      ; ТЕЛО АЗ
+PLY CNT2 0                   ; (C2) ПОВОРОТНАЯ НА 60*
+PLG CNT3 sin(60) -0.5 0 0    ; (C3) СИММЕТРИЯ
+END
+Z01 N1 -N2  #M=5    ; CNT2 CNT3 ГЕОМЕТРИЯ АЗ
+Z02 N2      #M=5    ; CNT2 CNT3 И КОНТЕЙНЕРА
+END
+EQU PITCH=1.275              ; ШАГ ТВЭЛ
+EQU RCLAD=0.455              ; R ОБОЛОЧКИ ТВЭЛ
+EQU RHE=0.39                 ; R ГАЗОВОЙ ПРОСЛОЙКИ
+EQU RFUEL=0.3785             ; R UO2
+C=     TVEL
+CELL F ;LEZ1
+SHEX N1 PITCH HALL
+RCZ  N2 0,0,0 HALL RCLAD     ; ОБОЛОЧКА
+RCZ  N3 0,0,0 HALL RHE       ; ПРОСЛОЙКА
+RCZ  N4 0,0,0 HALL RFUEL     ; UO2
+END
+Z01    1 -2          /2:2/-1 ; ВОДА
+Z02    2 -3          /3:4/-1 ; ОБОЛОЧКА
+Z03    3 -4          /4:3/-1 ; HE
+Z04    4             /5:1/-1 ; UO2
+END
+C=     CENTRAL CHANAL
+CELL C
+SHEX N1 PITCH HALL
+RCZ  N2 0,0,0 HALL 0.65      ; ОБОЛОЧКА
+RCZ  N3 0,0,0 HALL 0.55      ; ПРОСЛОЙКА
+END
+Z01    1 -2          /6:2/-1 ; ВОДА
+Z02    2 -3          /7:4/-1 ; ОБОЛОЧКА
+Z03    3             /8:5/-1 ; ОТВЕРСТИЕ
+END
+C=     NAPR STERZHEN'
+CELL H
+SHEX N1 PITCH HALL
+RCZ  N2 0,0,0 HALL 0.63
+RCZ  N3 0,0,0 HALL 0.55
+END
+Z01    1 -2          /9:2/-1
+Z02    2 -3          /10:4/-1
+Z03    3             /11:4/-1
+END
+LCELL A
+HEX N1 0,0,0 0 SK HALL
+HEX N2 0,0,0 0 23.5 HALL
+END
+VZ01   1 -2 #z=7 m=2 io=1
+VZ02 (FA) 2 #z=7 m=2 io=1
+END
+NET FA  -6.375, -11.04182,0 21, 21
+T01 F F F F F F F F F F F 0 0 0 0 0 0 0 0 0 0
+T02 F F F F F F F F F F F F 0 0 0 0 0 0 0 0 0
+T03 F F F F F F F F F F F F F 0 0 0 0 0 0 0 0
+T04 F F F F F F F F F F F F F F 0 0 0 0 0 0 0
+T05 F F F F F F F H F F F F F F F 0 0 0 0 0 0
+T06 F F F F F H F F F F H F F F F F 0 0 0 0 0
+T07 F F F F F F F F F F F F F F F F F 0 0 0 0
+T08 F F F F H F F F F H F F F H F F F F 0 0 0
+T09 F F F F F F F H F F F F F F F F F F F 0 0
+T10 F F F F F F F F F F F F H F F F F F F F 0
+T11 F F F F F H F F F F C F F F F H F F F F F
+T12 0 F F F F F F F H F F F F F F F F F F F F
+T13 0 0 F F F F F F F F F F F H F F F F F F F
+T14 0 0 0 F F F F H F F F H F F F F H F F F F
+T15 0 0 0 0 F F F F F F F F F F F F F F F F F
+T16 0 0 0 0 0 F F F F F H F F F F H F F F F F
+T17 0 0 0 0 0 0 F F F F F F F H F F F F F F F
+T18 0 0 0 0 0 0 0 F F F F F F F F F F F F F F
+T19 0 0 0 0 0 0 0 0 F F F F F F F F F F F F F
+T20 0 0 0 0 0 0 0 0 0 F F F F F F F F F F F F
+T21 0 0 0 0 0 0 0 0 0 0 F F F F F F F F F F F
+O01ALL -1
+END
+ENDL
+LATT G2MP Z01 Z02
+LISTEL A    ;(C2,C3)
+PARM 15,13  0.0  -SK  0.   -SKX  SKY  0.   SKX  SKY  0.
+L13 0 0 0 0 0 0 0 0 A A A 0 0 0 0 0
+L12 0 0 0 0 0 0 A A A A A A 0 0 0 0
+L11 0 0 0 0 A A A A A A A A A 0 0 0 
+L10 0 0 0 A A A A A A A A A A 0 0 0
+L09 0 0 A A A A A A A A A A A 0 0 0
+L08 0 0 A A A A A A A A A A 0 0 0 0
+L07 0 A A A A A A A A A A A 0 0 0 0
+L06 0 A A A A A A A A A A 0 0 0 0 0
+L05 A A A A A A A A A A A 0 0 0 0 0
+L04 A A A A A A A A A A 0 0 0 0 0 0
+L03 A A A A A A A A A 0 0 0 0 0 0 0
+L02 0 A A A A A A 0 0 0 0 0 0 0 0 0
+L01 0 0 A A A 0 0 0 0 0 0 0 0 0 0 0
+C=C SHOW
+FINISH
+NPS 1
+PROB 1
+ANGLEN SS
+MDIS S
+EDIS S
+TYPE N
+RCZ -0.15,118,0 HALL 273/2
+REPER 1
+SNAM SS
+NOBJ 0
+FINISH
+RGS 1 0
+KEFF
+LIFE
+PERC 0
+EABS
+PTYPE 1
+ENERGY 0
+MFLU 1
+END
+FINISH
+BRG 1 0
+BURALL
+VOL     4.06631E+06  7.61689E+06  3.01398E+05  2.40212E+06 2.21577E+06
+FINISH
+ISTR 0
+NTOT   100
+NBAT   5
+FINISH
+NAMVAR  BURNUP
+MAXSER  50
+NPRINT  0
+DTZML   1
+FINISH
+BURN
+CODE     RSTP
+FISZON   1
+POWER    1399000
+STEP     1458.33 5
+ZONPRI   1
+SUMZON   ZONB
+CONTEN
+FINISH
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
